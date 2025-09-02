@@ -51,6 +51,32 @@ async def start(request : Request):
 async def register_page(request : Request):
     return templates.TemplateResponse("/register.html", {"request": request})
 
+@app.get("/login", response_class=HTMLResponse)
+async def login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+
+
+@app.post("/login", response_class = HTMLResponse)
+async def login(
+    request : Request,
+    db: Session = Depends(get_db),
+    email: str = Form(...),
+    password: str = Form (...)
+):
+    user = db.query(models.User).filter(models.User.email == email).first()
+
+    if not user or not pwd_context.verify(password, user.hashed_password):
+        return templates.TemplateResponse(
+            "login.html",
+            {"request": request, "error": " Invalid email or password"},
+            status_code= status.HTTP_401_UNAUTHORIZED
+        )
+    request.session["user_id"]= user.id
+    
+    response = RedirectResponse(url = "/", status_code=status.HTTP_303_SEE_OTHER)
+    return response
+
+
 @app.post("/register", response_class=HTMLResponse)
 async def register(
     request: Request,

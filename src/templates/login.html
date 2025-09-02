@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            margin: 10;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 100px;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            background: #282828;
+            padding: 30px;
+            border: 3px solid #666666;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: border-color 0.3s ease-in-out;
+            color: white; 
+        }
+
+        .container:hover {
+            border-color: #dddddd;
+        }
+
+        h2, h3 {
+            color: white; 
+        }
+
+        /* Novo estilo para as imagens */
+        .container img {
+            width: 80px; 
+            height: auto;
+            margin-bottom: 15px; 
+            border-radius: 100%; 
+            background-color: #f0f0f0; 
+            padding: 1px; 
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;   
+            align-items: center;      
+        }
+
+        input {
+            margin-top : 5px;
+            padding: 8px;
+            margin-bottom: 1px;
+            width: 200px;
+        }
+
+        button {
+            margin-top: 1px;
+            padding: 8px 15px;
+            cursor: pointer;
+            border: none;
+            background-color: #282828;
+            color: white;
+            border-radius: 50px;
+            font-size: 14px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #dddddd;
+        }
+        input {
+            margin-top: 5px;
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 150px;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 10px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        a {
+            margin-top: 15px;
+            display: inline-block;
+            text-decoration: none;
+            color: #007BFF;
+        }
+    </style>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+    <h2>Login</h2>
+
+
+    <form action="/login" method="post">
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" required><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <button type="submit">Login</button>
+    </form>
+    <a href="/register">
+    <button>Create an account</button>
+    </a>
+    </div>
+</body>
+</html>
