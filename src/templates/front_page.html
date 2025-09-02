@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home page</title>
+    <style>
+        body {
+            margin: 10;
+            height: 70vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            background: gray;
+            padding: 30px;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;   
+            align-items: center;      
+        }
+
+        input {
+            margin-top : 5px;
+            padding: 8px;
+            margin-bottom: 1px;
+            width: 200px;
+        }
+
+       button {
+            margin-top: 1px;
+            padding: 8px 15px;
+            cursor: pointer;
+            border: none;
+            background-color: #007BFF;
+            color: black;
+            border-radius: 50px;
+            font-size: 14px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            margin-top: 15px;
+            display: inline-block;
+            text-decoration: none;
+            color: #007BFF;
+        }
+    </style>
+    <link rel="stylesheet" href="/static/style.css">
+<body>
+    <div class = "container">
+    <h2>Welcome to my site</h2><br>
+    <a href="/login">
+    <button>Login into an account</button>
+</a><br><br>
+<a href="/register">
+    <button>Create an account</button>
+</a>
+</div>
+</body>
