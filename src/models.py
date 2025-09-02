@@ -8,6 +8,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50), nullable=False)
     email = Column(String(100), unique=True, index=True, nullable=False)
+    hashed_password = Column(String(100))
     rides = relationship("Ride", back_populates="driver")
 
 class Ride(Base):
