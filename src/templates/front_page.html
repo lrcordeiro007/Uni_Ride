@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,16 +11,41 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            gap: 100px;
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
         }
 
         .container {
-            background: gray;
+            background: #282828;
             padding: 30px;
+            border: 3px solid #666666;
             border-radius: 50px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             text-align: center;
+            transition: border-color 0.3s ease-in-out;
+            color: white; 
+
+            width: 150px;
+            height: 300px;
+        }
+
+        .container:hover {
+            border-color: #dddddd;
+        }
+
+        h2, h3 {
+            color: white; 
+        }
+
+        /* Novo estilo para as imagens */
+        .container img {
+            width: 80px; 
+            height: auto;
+            margin-bottom: 15px; 
+            border-radius: 100%; 
+            background-color: #f0f0f0; 
+            padding: 1px; 
         }
 
         form {
@@ -37,21 +61,21 @@
             width: 200px;
         }
 
-       button {
+        button {
             margin-top: 1px;
             padding: 8px 15px;
             cursor: pointer;
             border: none;
-            background-color: #007BFF;
-            color: black;
+            background-color: #282828;
+            color: white;
             border-radius: 50px;
             font-size: 14px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-
+            transition: background-color 0.3s ease-in-out;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #dddddd;
         }
 
         a {
@@ -64,12 +88,25 @@
     <link rel="stylesheet" href="/static/style.css">
 <body>
     <div class = "container">
-    <h2>Welcome to my site</h2><br>
-    <a href="/login">
-    <button>Login into an account</button>
-</a><br><br>
-<a href="/register">
-    <button>Create an account</button>
-</a>
-</div>
+        <img src="https://images.vexels.com/media/users/3/139416/isolated/preview/a3a34d579244ad61770f15c0d83e58b7-corridas-de-carros.png" 
+        alt="Ícone de Carro"> <h2>Motorista</h2><br>
+        <a href="/login/motorista">
+            <button>Login</button>
+        </a><br><br>
+        <a href="/register/motorista">
+            <button>Criar uma conta</button>
+        </a>
+    </div>
+
+    <div class = "container">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAb1BMVEX///8AAABNTU319fXm5uZkZGTBwcHu7u7h4eH4+PhaWlojIyOZmZnd3d12dnaVlZVqampGRkYtLS3R0dHJyckXFxezs7M9PT0QEBCSkpKMjIytra1FRUW7u7tbW1u2trYxMTGFhYWlpaVycnIdHR3j2ciuAAAEWklEQVR4nO3diXaiQBAF0DSguCAuuKOJkvz/N044xsnosPRSdBWed7+g31Gprl7w7Q0AAAAAAAAAAAAAAAAAAAAAAACMxbPhPB1MgiCYDNL5eRZzD4hWlgRT9WgaJBn3sKhEx+d0f1MeIu7BEVgHNfFugjX3AB215Ot9xtGiNV9pMeIeqK1CK1+p4B6qlfG7dkClJmPu4ZqbbQwCKrWZcQ/Y1NAoX2nIPWQzW+OASm25B23CJmCvIq6tAvboizqyDKhUTwpjWDcNbTcNuQevRW8iU23BPXgddk+Zux48bWKzSv9sI78zTp0CKpVyB2gzcwyolPTpm8l0u9o7d4Rm9qXwl+yi6PorLIn+JYYEAZWSXPY/SBJKrokTkoQT7hj1HKv9neCqb9s1PZO7vjgnSjjnDlJrQJRwwB2kznhHlHAndW0x3hMl3EvdsKGYst1InX1nZAml7ixSFQu55cJ8nbuO1GXF10/4+t/S13/SuK/R3EmtFhFZQqkVP7wQBbyI7fJpGmDJLfCVKOGVO0gtqoIotRzSTb2lPmi+LUkCLrljNNA/I9Qk4Y7RgKYiCv6S0tQLubWiRDH5ljrt/uG+GLXjjtDCvSTKLYY/2o/MNgu4A7RybaGkNk7/ODoFPHIPX4PTyvdJ6mr3A5fvaQ++oyX7neAP7qHrst1lk7ur9p+rVUC5jW8Fm4i9CmhTM/pQJx7khgFz7gGbM1sBl7rK3SjU39YfiF0gbfGx0sq3OnMP1F6oUxkPcg8I6YhaHqr7Y7/zlcL8VJvvlPf1B/gkKqoWUk+F6EU1U+MsT5err/LEzf5rtUzzrBd9krFxHEVR/JrZAAAA4Ns4Wp/zIknmSVLk53X0SmU/zIpr1eT7dC2y/k+84+G1+fTC8jrscfs0KvRuI04K2RfyasS5yU5ikPftk8w+DeLdfPZpuW1ot8G2E7/B/eNsfwjz0oeMa7eTX0vhZ03eRu6XuwaiH6yJc76S3HNtM7K7a0I3u2k+wBuJH2NMdcj7ZiJuBpDZv3an2lTYBMDtpTTVRF3LP3QQUKkDd6xfFG/DqCLmDRkuL4ZqJuRSd3cBhbwZy7xPMvHJHY/uJlAd9nNElBOZaszTm3PnAZViPalBd2u0CeM8PNQ7L+Nqxbeq2mWd+BdbzTA9nGeP6Vgf3cXmdjznUtxfr6eP5bYXzZvLdDGccQ+pXrejZ+P/eep2Ncac90PSseeA/h823XYUVTx3GX6ma4/8Tt66Wrdo4nVNw2ex/+Xzl9jN2lobj2tvnnqKZx57DB99bxV/vTDVGyBNeXtNtP9qf+dru8ZfX/jMV5/IUQxvfJVEqhdembt4SsgWUCkkJEK93atv6ikhVzn0t9vW/V5FHV97GDydRclbd8H1NfW3JczR4Zc8dvkv3x+a/XsjlXevFxjGtGe8dHj/m8uXXxH+ftz42j0sLXj2gaNtWv7Pdtcm6falLn0DAAAAAAAAAAAAAAAAAAAAAAA4+ANXfkCX3pxP8wAAAABJRU5ErkJggg==" 
+        alt="Ícone de Usuário"> <h3> Passageiro</h3><br>
+        <a href = "/login/passageiro">
+            <button> Login</button>
+        </a><br><br>
+        <a href="/register/passageiro">
+            <button>Criar uma conta</button>
+        </a>
+    </div>
 </body>
+</html>
