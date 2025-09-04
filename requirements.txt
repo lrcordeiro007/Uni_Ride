@@ -10,4 +10,3 @@ passlib
 bcrypt
 pydantic
 itsdangerous
-passlib
