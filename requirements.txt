@@ -10,3 +10,4 @@ passlib
 bcrypt
 pydantic
 itsdangerous
+psycopg2-binary
