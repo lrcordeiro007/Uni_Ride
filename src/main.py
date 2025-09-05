@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Annotated
 import models
-from database import engine, SessionLocal, Base
+from database import engine, SessionLocal
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 from starlette.middleware.sessions import SessionMiddleware
@@ -17,6 +17,8 @@ app = FastAPI()
 
 templates = Jinja2Templates(directory="templates")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
 models.Base.metadata.create_all(bind=engine)
 app.add_middleware(SessionMiddleware, secret_key = SECRET_KEY)
 app.mount("/static", StaticFiles(directory="static"), name="static")
