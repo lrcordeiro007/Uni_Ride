@@ -57,6 +57,9 @@ async def register_page(request : Request):
 async def login_page(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
+@app.get("/ride", response_class=HTMLResponse)
+async def home_page(request: Request):
+    return templates.TemplateResponse("ride.html", {"request": request})
 
 @app.post("/login", response_class = HTMLResponse)
 async def login(
@@ -75,7 +78,7 @@ async def login(
         )
     request.session["user_id"]= user.id
     
-    response = RedirectResponse(url = "/", status_code=status.HTTP_303_SEE_OTHER)
+    response = RedirectResponse(url = "/ride", status_code=status.HTTP_303_SEE_OTHER)
     return response
 
 
@@ -105,6 +108,27 @@ async def register(
 
     response = RedirectResponse(url="/",status_code=status.HTTP_303_SEE_OTHER)
     return response
+
+@app.post("/ride", response_class=HTMLResponse)
+async def create_ride(
+    request: Request,
+    db: Session = Depends(get_db),
+    origin: str = Form(...),
+    destination: str = Form(...),
+    driver_id: int = Form(...)
+):
+    user_id = request.session.get("user_id")
+    if not user_id:
+        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
+
+    new_ride = models.Ride(origin=origin, destination=destination, driver_id=driver_id)
+    db.add(new_ride)
+    db.commit()
+    db.refresh(new_ride)
+
+    response = RedirectResponse(url="/ride", status_code=status.HTTP_303_SEE_OTHER)
+    return response
+
 
 if __name__ == "__main__":
   import uvicorn 

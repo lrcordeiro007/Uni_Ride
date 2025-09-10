@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mapa Interativo com FastAPI</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // Inicializa o mapa para ajustar à vista do mundo
+        var map = L.map('map').fitWorld();
+        
+        // Adiciona a camada de mapa (tiles) do OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Função que é executada quando a localização é encontrada
+        function onLocationFound(e) {
+            var radius = e.accuracy / 2;
+
+            // Centraliza o mapa na sua nova localização
+            map.setView(e.latlng, 16);
+
+            // Adiciona um marcador na sua localização
+            L.marker(e.latlng).addTo(map)
+                .bindPopup("Você está aqui!").openPopup();
+
+            // Adiciona um círculo para mostrar a precisão da localização
+            L.circle(e.latlng, radius).addTo(map);
+        }
+
+        // Função que é executada em caso de erro (se o usuário negar a permissão, por exemplo)
+        function onLocationError(e) {
+            alert(e.message);
+        }
+
+        // Adiciona os eventos para tratar o sucesso ou o erro
+        map.on('locationfound', onLocationFound);
+        map.on('locationerror', onLocationError);
+
+        // Solicita a localização do usuário com alta precisão
+        map.locate({setView: true, maxZoom: 16, enableHighAccuracy: true});
+        
+    </script>
+</body>
+</html>
