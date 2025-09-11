@@ -1,24 +1,112 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Mapa Interativo com FastAPI</title>
+    <title>Mapa</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
 
     <style>
         body, html {
             height: 100%;
             margin: 0;
             padding: 0;
+            overflow: hidden; /* Prevent scrolling */
         }
         #map {
             height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .container {
+            background: #282828;
+            padding: 20px; /* Reduced padding */
+            border: 3px solid #666666;
+            border-radius: 20px; /* Smaller border-radius */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: border-color 0.3s ease-in-out;
+            color: white;
+            position: absolute; /* Position over the map */
+            top: 50%; /* Center vertically */
+            left: 20px; /* Position on the left */
+            transform: translateY(-50%); /* Adjust for vertical centering */
+            z-index: 1000; /* Ensure it's above the map */
+            width: 250px; /* Reduced width */
+        }
+
+        .container:hover {
+            border-color: #dddddd;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input {
+            margin-top : 5px;
+            padding: 8px;
+            margin-bottom: 1px;
+            width: 180px; /* Adjusted input width */
+        }
+
+        button {
+            margin-top: 10px; /* Adjusted margin */
+            padding: 8px 15px;
+            cursor: pointer;
+            border: none;
+            background-color: #282828;
+            color: white;
+            border-radius: 50px;
+            font-size: 14px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #dddddd;
+        }
+        input {
+            margin-top: 5px;
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 150px;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 10px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        a {
+            margin-top: 15px;
+            display: inline-block;
+            text-decoration: none;
+            color: #007BFF;
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Carona</h1>
+        <form method="POST">
+            <label>Origin</label>
+            <input type="text" name="origin" required><br>
+            <label>Destination</label>
+            <input type="text" name="destination" required><br>
+            <label>ID</label>
+            <input type="text" name="id" required>
+
+            <button type="submit">Register</button>
+        </form>
+        <a href="/login">
+        <button>Already have an account</button>
+        </a>
+    </div>
 
     <div id="map"></div>
 
@@ -27,7 +115,7 @@
     <script>
         // Inicializa o mapa para ajustar à vista do mundo
         var map = L.map('map').fitWorld();
-        
+
         // Adiciona a camada de mapa (tiles) do OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -57,9 +145,9 @@
         map.on('locationfound', onLocationFound);
         map.on('locationerror', onLocationError);
 
-        // Solicita a localização do usuário com alta precisão
+
         map.locate({setView: true, maxZoom: 16, enableHighAccuracy: true});
-        
+
     </script>
 </body>
 </html>
