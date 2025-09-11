@@ -13,7 +13,7 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Prevent scrolling */
+            overflow: hidden; 
         }
         #map {
             height: 100%;
@@ -25,19 +25,19 @@
 
         .container {
             background: #282828;
-            padding: 20px; /* Reduced padding */
+            padding: 20px; 
             border: 3px solid #666666;
-            border-radius: 20px; /* Smaller border-radius */
+            border-radius: 50px; 
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             text-align: center;
             transition: border-color 0.3s ease-in-out;
             color: white;
-            position: absolute; /* Position over the map */
-            top: 50%; /* Center vertically */
-            left: 20px; /* Position on the left */
-            transform: translateY(-50%); /* Adjust for vertical centering */
-            z-index: 1000; /* Ensure it's above the map */
-            width: 250px; /* Reduced width */
+            position: absolute; 
+            top: 50%; 
+            left: 20px; 
+            transform: translateY(-50%); 
+            z-index: 1000; 
+            width: 250px; 
         }
 
         .container:hover {
@@ -53,11 +53,11 @@
             margin-top : 5px;
             padding: 8px;
             margin-bottom: 1px;
-            width: 180px; /* Adjusted input width */
+            width: 180px; 
         }
 
         button {
-            margin-top: 10px; /* Adjusted margin */
+            margin-top: 10px; 
             padding: 8px 15px;
             cursor: pointer;
             border: none;
@@ -113,35 +113,34 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // Inicializa o mapa para ajustar à vista do mundo
+        
         var map = L.map('map').fitWorld();
 
-        // Adiciona a camada de mapa (tiles) do OpenStreetMap
+        
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Função que é executada quando a localização é encontrada
+        
         function onLocationFound(e) {
             var radius = e.accuracy / 2;
 
-            // Centraliza o mapa na sua nova localização
+            
             map.setView(e.latlng, 16);
 
-            // Adiciona um marcador na sua localização
+            
             L.marker(e.latlng).addTo(map)
                 .bindPopup("Você está aqui!").openPopup();
 
-            // Adiciona um círculo para mostrar a precisão da localização
+            
             L.circle(e.latlng, radius).addTo(map);
         }
 
-        // Função que é executada em caso de erro (se o usuário negar a permissão, por exemplo)
-        function onLocationError(e) {
+                function onLocationError(e) {
             alert(e.message);
         }
 
-        // Adiciona os eventos para tratar o sucesso ou o erro
+        
         map.on('locationfound', onLocationFound);
         map.on('locationerror', onLocationError);
 
