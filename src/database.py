@@ -1,11 +1,24 @@
+import os
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
+# Carrega as variáveis do arquivo .env para o sistema
+load_dotenv()
 
-URL_DATABASE = 'postgresql+psycopg2://postgres:12345678@localhost:5432/Carona_DB'
+# Obtém as variáveis de ambiente
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
+DB_NAME = os.getenv("DB_NAME")
 
+# Monta a URL de conexão usando f-string (mais limpo e legível)
+URL_DATABASE = f'postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 
+# Criação do engine
 engine = create_engine(URL_DATABASE, pool_pre_ping=True)
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
