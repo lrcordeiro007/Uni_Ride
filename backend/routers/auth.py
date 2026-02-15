@@ -10,7 +10,6 @@ from database import SessionLocal
 
 router = APIRouter(tags=["Autenticação"])
 
-# --- CONFIGURAÇÃO GOOGLE OAUTH ---
 oauth = OAuth()
 oauth.register(
     name='google',
@@ -20,10 +19,8 @@ oauth.register(
     client_kwargs={'scope': 'openid email profile'}
 )
 
-# --- SEGURANÇA (Senha Manual) ---
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Dependência do Banco de Dados
 def get_db():
     db = SessionLocal()
     try:
@@ -31,7 +28,6 @@ def get_db():
     finally:
         db.close()
 
-# --- ROTAS DE PROCESSAMENTO ---
 
 @router.get("/login/google")
 async def login_google(request: Request):

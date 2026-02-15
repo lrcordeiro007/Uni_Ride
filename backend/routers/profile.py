@@ -10,14 +10,11 @@ from database import SessionLocal
 
 router = APIRouter(prefix="/profile", tags=["Perfil"])
 
-# --- CONFIGURAÇÃO DE CAMINHOS ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# Como este arquivo está dentro de /routers, precisamos subir dois níveis para achar /frontend
 FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "..", "frontend"))
 UPLOAD_DIR = os.path.join(FRONTEND_DIR, "static", "uploads")
 templates = Jinja2Templates(directory=os.path.join(FRONTEND_DIR, "templates"))
 
-# Dependência do Banco de Dados
 def get_db():
     db = SessionLocal()
     try:
@@ -25,7 +22,6 @@ def get_db():
     finally:
         db.close()
 
-# --- ROTAS ---
 
 @router.get("/", response_class=HTMLResponse)
 async def profile_page(request: Request, db: Session = Depends(get_db)):
@@ -53,9 +49,7 @@ async def update_profile(
     if user:
         user.name = name
         
-        # Lógica de Upload de Arquivo
         if profile_file and profile_file.filename:
-            # Garante que a pasta de upload existe
             os.makedirs(UPLOAD_DIR, exist_ok=True)
             
             ext = os.path.splitext(profile_file.filename)[1]
@@ -65,10 +59,8 @@ async def update_profile(
             with open(file_path, "wb") as buffer:
                 shutil.copyfileobj(profile_file.file, buffer)
             
-            # Atualiza o caminho da imagem no banco
             user.profile_pic = f"/static/uploads/{filename}"
             
-        # Atualização do modelo do carro (apenas se for motorista)
         if user.driver_profile and car_model:
             user.driver_profile.license_number = car_model
             

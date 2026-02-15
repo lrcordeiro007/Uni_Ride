@@ -7,15 +7,12 @@ from sqlalchemy.orm import Session
 import models
 from database import SessionLocal
 
-# Definimos o prefixo /admin para não precisar repetir em todas as rotas
 router = APIRouter(prefix="/admin", tags=["Administração"])
 
-# --- CONFIGURAÇÃO DE CAMINHOS ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "..", "frontend"))
 templates = Jinja2Templates(directory=os.path.join(FRONTEND_DIR, "templates"))
 
-# Dependência do Banco de Dados
 def get_db():
     db = SessionLocal()
     try:
@@ -23,7 +20,6 @@ def get_db():
     finally:
         db.close()
 
-# --- ROTAS DE LOGIN ADMINISTRATIVO ---
 
 @router.get("/login", response_class=HTMLResponse)
 async def admin_login_page(request: Request):
@@ -31,13 +27,11 @@ async def admin_login_page(request: Request):
 
 @router.post("/login")
 async def admin_login_process(request: Request, admin_key: str = Form(...)):
-    # Verifica a chave administrativa via variável de ambiente
     if admin_key == os.getenv("ADMIN_SECRET"):
         request.session["is_admin"] = True
         return RedirectResponse(url="/admin/users", status_code=status.HTTP_303_SEE_OTHER)
     return templates.TemplateResponse("admin_login.html", {"request": request, "error": "Chave Inválida"})
 
-# --- GERENCIAMENTO DE USUÁRIOS ---
 
 @router.get("/users", response_class=HTMLResponse)
 async def admin_users_page(request: Request, search: str = None, db: Session = Depends(get_db)):
@@ -84,6 +78,5 @@ async def admin_delete_user(user_id: int, request: Request, db: Session = Depend
 
 @router.get("/logout")
 async def admin_logout(request: Request):
-    # Remove apenas a flag de admin da sessão
     request.session.pop("is_admin", None)
     return RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)

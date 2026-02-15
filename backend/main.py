@@ -7,31 +7,24 @@ from starlette.middleware.sessions import SessionMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 
-# Imports internos
 import models
 from database import engine, SessionLocal
-from routers import auth, profile, admin  # Importando seus novos módulos
+from routers import auth, profile, admin
 
-# --- CONFIGURAÇÃO DE CAMINHOS ABSOLUTOS ---
-# BASE_DIR aponta para /backend
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# FRONTEND_DIR aponta para /frontend (sobe um nível)
 FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "frontend"))
 
 app = FastAPI(title="UniRide API")
 
-# --- MIDDLEWARE DE SESSÃO ---
 app.add_middleware(
     SessionMiddleware, 
     secret_key=os.getenv("SESSION_SECRET", "SUA_CHAVE_FIXA_MUITO_SEGURA_AQUI"),
-    https_only=False, # Definir como True em produção com HTTPS
+    https_only=False,
     same_site="lax"
 )
 
-# --- BANCO DE DADOS E MIGRAÇÕES ---
 models.Base.metadata.create_all(bind=engine)
 
-# Garante que as novas colunas existam sem precisar resetar o banco
 with engine.connect() as conn:
     try:
         conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id VARCHAR;"))
@@ -41,18 +34,15 @@ with engine.connect() as conn:
     except Exception as e:
         print(f"Aviso de migração automática: {e}")
 
-# --- ARQUIVOS ESTÁTICOS E TEMPLATES ---
 STATIC_DIR = os.path.join(FRONTEND_DIR, "static")
 TEMPLATES_DIR = os.path.join(FRONTEND_DIR, "templates")
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
-# Também montamos o diretório de scripts se você o usar separadamente
 if os.path.exists(os.path.join(FRONTEND_DIR, "script")):
     app.mount("/script", StaticFiles(directory=os.path.join(FRONTEND_DIR, "script")), name="script")
 
 templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
-# Dependência do Banco de Dados para as rotas da main
 def get_db():
     db = SessionLocal()
     try:
@@ -60,12 +50,10 @@ def get_db():
     finally:
         db.close()
 
-# --- REGISTRO DOS ROUTERS (MODULARIZAÇÃO) ---
 app.include_router(auth.router)
 app.include_router(profile.router)
 app.include_router(admin.router)
 
-# --- ROTAS DE NAVEGAÇÃO RAIZ ---
 
 @app.get("/", response_class=HTMLResponse)
 async def start(request: Request):
@@ -96,8 +84,6 @@ async def home_page(request: Request, db: Session = Depends(get_db)):
 
     return templates.TemplateResponse("ride.html", {"request": request, "user": user})
 
-# --- EXECUÇÃO ---
 if __name__ == "__main__":
     import uvicorn
-    # Roda o servidor. O reload=True é ótimo para o seu desenvolvimento no Ubuntu.
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
