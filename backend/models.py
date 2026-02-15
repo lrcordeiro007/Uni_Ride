@@ -8,8 +8,18 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
-    hashed_password = Column(String)
+    
+    # hashed_password agora é opcional para permitir usuários do Google
+    hashed_password = Column(String, nullable=True)
+    
+    # Novos campos para Google OAuth
+    google_id = Column(String, unique=True, index=True, nullable=True)
+    profile_pic = Column(String, nullable=True)
+    
+    # Relacionamentos existentes
     rides = relationship("Ride", back_populates="driver")
+    # Sugestão: adicione uselist=False para garantir 1 usuário -> 1 motorista
+    driver_profile = relationship("Driver", back_populates="user", uselist=False)
 
 class Ride(Base):
     __tablename__ = 'rides'
@@ -18,6 +28,7 @@ class Ride(Base):
     origin = Column(String, nullable=False)
     destination = Column(String, nullable=False)
     driver_id = Column(Integer, ForeignKey('users.id'))
+    
     driver = relationship("User", back_populates="rides")
 
 class Driver(Base):
@@ -26,4 +37,6 @@ class Driver(Base):
     id = Column(Integer, primary_key=True, index=True)
     license_number = Column(String, unique=True, nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'))
-    user = relationship("User")
+    
+    # Adicionado back_populates para manter a via de mão dupla com User
+    user = relationship("User", back_populates="driver_profile")

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usuário</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            padding-top: 60px;
+        }
+
+        /* Navbar (Igual à da lista) */
+        .navbar {
+            background: #282828;
+            border-bottom: 3px solid #666;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+
+        .nav-brand { color: #4CAF50; font-weight: bold; font-size: 20px; }
+        .nav-links a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; }
+
+        /* Card Container */
+        .container {
+            background: #282828;
+            padding: 40px;
+            border: 3px solid #666666;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: white;
+            width: 320px;
+        }
+
+        h2 { margin-bottom: 25px; }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .input-group {
+            text-align: left;
+            width: 100%;
+        }
+
+        label { font-size: 12px; margin-left: 15px; color: #aaa; }
+
+        input {
+            margin-top: 5px;
+            padding: 12px;
+            border-radius: 25px;
+            border: none;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: white;
+        }
+
+        button {
+            padding: 12px 25px;
+            cursor: pointer;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 50px;
+            font-size: 16px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        button:hover { background-color: #dddddd; color: #282828; }
+
+        .cancel-link {
+            margin-top: 20px;
+            text-decoration: none;
+            color: #007BFF;
+            font-size: 14px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">UniRide Admin</div>
+        <div class="nav-links">
+            <a href="/admin/users?admin_key={{ admin_key }}">Lista de Usuários</a>
+            <a href="/">Sair</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Editar Usuário</h2>
+        <form method="post" action="/admin/update/{{ user.id }}">
+            <input type="hidden" name="admin_key" value="{{ admin_key }}">
+            
+            <div class="input-group">
+                <label>NOME COMPLETO</label>
+                <input type="text" name="name" value="{{ user.name }}" required>
+            </div>
+
+            <div class="input-group">
+                <label>E-MAIL</label>
+                <input type="email" name="email" value="{{ user.email }}" required>
+            </div>
+
+            <button type="submit">Salvar Alterações</button>
+        </form>
+        <a href="/admin/users?admin_key={{ admin_key }}" class="cancel-link">Cancelar e Voltar</a>
+    </div>
+</body>
+</html> 

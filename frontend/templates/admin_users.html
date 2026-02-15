@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Usuários</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            padding-top: 100px; /* Espaço para a navbar */
+        }
+
+        /* Navbar Estilizada */
+        .navbar {
+            background: #282828;
+            border-bottom: 3px solid #666;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            box-sizing: border-box;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .nav-brand { color: #4CAF50; font-weight: bold; font-size: 20px; }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .nav-links a:hover { color: #4CAF50; }
+
+        /* Container Principal */
+        .admin-container {
+            background: #282828;
+            padding: 30px;
+            border: 3px solid #666666;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: white;
+            width: 90%;
+            max-width: 1000px;
+        }
+
+        .search-box {
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        input {
+            padding: 10px;
+            border-radius: 25px;
+            border: 1px solid #666;
+            width: 250px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #333;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        th { background-color: #444; color: #4CAF50; }
+
+        /* Botões */
+        .btn-action {
+            padding: 8px 15px;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            font-size: 12px;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .btn-edit { background-color: #4CAF50; }
+        .btn-delete { background-color: #f44336; }
+        .btn-search { background-color: #666; color: white; }
+
+        .btn-action:hover { transform: scale(1.05); background-color: #dddddd; color: #282828; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">UniRide Admin</div>
+        <div class="nav-links">
+            <a href="/admin/users?admin_key={{ admin_key }}">Usuários</a>
+            <a href="/">Sair</a>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <h2>Gerenciamento de Usuários</h2>
+        
+        <form class="search-box" method="get" action="/admin/users">
+            <input type="hidden" name="admin_key" value="{{ admin_key }}">
+            <input type="text" name="search" placeholder="Buscar por nome..." value="{{ search or '' }}">
+            <button type="submit" class="btn-action btn-search">Buscar</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <a href="/admin/edit/{{ user.id }}?admin_key={{ admin_key }}" class="btn-action btn-edit">Editar</a>
+                        <form method="post" action="/admin/delete/{{ user.id }}" style="display:inline;" onsubmit="return confirm('Confirmar exclusão?');">
+                            <input type="hidden" name="admin_key" value="{{ admin_key }}">
+                            <button type="submit" class="btn-action btn-delete">Deletar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

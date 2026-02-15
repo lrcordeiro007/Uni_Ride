@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Perfil - UniRide</title>
+    <style>
+        body { margin: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center; font-family: Arial, sans-serif; background-color: #1a1a1a; color: white; }
+        .container { background: #282828; padding: 40px; border: 3px solid #666; border-radius: 50px; text-align: center; width: 350px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        
+        /* Estilo da foto de perfil com preview */
+        .profile-img { 
+            width: 120px; 
+            height: 120px; 
+            border-radius: 50%; 
+            border: 3px solid #4CAF50; 
+            object-fit: cover; 
+            margin-bottom: 20px; 
+            background-color: #333;
+            transition: transform 0.3s;
+        }
+
+        .profile-img:hover { transform: scale(1.05); }
+
+        form { display: flex; flex-direction: column; align-items: center; }
+        label { font-size: 13px; color: #aaa; margin-top: 10px; align-self: flex-start; margin-left: 10%; }
+        
+        input { 
+            padding: 12px; 
+            border-radius: 25px; 
+            border: none; 
+            width: 85%; 
+            margin: 5px 0 15px 0; 
+            box-sizing: border-box; 
+            background-color: #eee; 
+            color: #333;
+        }
+
+        /* Estilo para o input de arquivo */
+        input[type="file"] { background: transparent; color: #ccc; font-size: 12px; }
+
+        button { padding: 12px; cursor: pointer; border: none; background-color: #4CAF50; color: white; border-radius: 50px; width: 85%; transition: 0.3s; font-weight: bold; margin-top: 10px; }
+        button:hover { background-color: #dddddd; color: #282828; }
+        
+        .back-link { display: block; margin-top: 20px; color: #007BFF; text-decoration: none; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Meu Perfil</h2>
+        
+        <img id="profile-preview" src="{{ user.profile_pic or 'https://via.placeholder.com/120' }}" class="profile-img" alt="Foto de Perfil">
+        
+        <form action="/profile/update" method="post" enctype="multipart/form-data">
+            <label>Nome:</label>
+            <input type="text" name="name" value="{{ user.name }}" required>
+            
+            <label>Nova Foto de Perfil:</label>
+            <input type="file" id="file-input" name="profile_file" accept="image/*">
+
+            {% if user.driver_profile %}
+            <label>Modelo do Carro (Motorista):</label>
+            <input type="text" name="car_model" value="{{ user.driver_profile.license_number }}" placeholder="Ex: Honda Civic">
+            {% endif %}
+
+            <button type="submit">Atualizar Dados</button>
+        </form>
+        
+        <a href="/ride" class="back-link">← Voltar para Caronas</a>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const profilePreview = document.getElementById('profile-preview');
+
+        fileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                // FileReader é uma API do navegador para ler arquivos locais
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    // Quando a leitura termina, define o src da imagem para o resultado
+                    profilePreview.src = e.target.result;
+                }
+                
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UniRide - Mapa de Caronas</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+        }
+
+        /* Header fixo no topo */
+        header {
+            background: #282828;
+            padding: 10px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #666;
+            position: relative;
+            z-index: 1001; /* Fica acima do mapa e do container */
+            height: 60px;
+            box-sizing: border-box;
+            color: white;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-info span {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #4CAF50;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.1);
+        }
+
+        #map {
+            height: calc(100% - 60px); /* Ocupa o restante da tela descontando o header */
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        /* Container lateral ajustado */
+        .container {
+            background: #282828;
+            padding: 20px; 
+            border: 3px solid #666666;
+            border-radius: 40px; /* Levemente menor para harmonia visual */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            color: white;
+            position: absolute; 
+            top: 100px; /* Abaixo do header */
+            left: 20px; 
+            z-index: 1000; 
+            width: 250px; 
+            transition: border-color 0.3s;
+        }
+
+        .container:hover {
+            border-color: #4CAF50;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            font-size: 12px;
+            margin-bottom: 3px;
+            color: #ccc;
+        }
+
+        input {
+            margin-bottom: 12px;
+            padding: 10px;
+            width: 180px;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            background-color: #eee;
+        }
+
+        button {
+            margin-top: 5px; 
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: #4CAF50; /* Cor de destaque */
+            color: white;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #dddddd;
+            color: #282828;
+        }
+
+        .btn-switch {
+            background-color: #444;
+            margin-top: 15px;
+            font-size: 12px;
+            padding: 8px 15px;
+        }
+
+        a { text-decoration: none; }
+    </style>
+</head>
+<body>
+    <header>
+        <div style="font-weight: bold; color: #4CAF50; font-size: 20px;">UniRide</div>
+        <div class="user-info">
+            <span>Olá, {{ user.name }}</span>
+            <a href="/profile">
+                <img src="{{ user.profile_pic or 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y' }}" 
+                     class="profile-pic" title="Editar Perfil">
+            </a>
+            <a href="/admin/logout" style="color: #ff5555; margin-left: 10px; font-size: 13px;">Sair</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2 style="margin-top: 0;">Nova Carona</h2>
+        <form method="POST">
+            <label>Origem</label>
+            <input type="text" name="origin" placeholder="Onde você está?" required>
+            
+            <label>Destino</label>
+            <input type="text" name="destination" placeholder="Para onde vai?" required>
+            
+            <button type="submit">Criar Viagem</button>
+        </form>
+        
+        <a href="/login">
+            <button class="btn-switch">Trocar de Conta</button>
+        </a>
+    </div>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // Inicializa o mapa focado no Brasil por padrão antes da geolocalização
+        var map = L.map('map').setView([-16.6869, -49.2648], 13); // Foco inicial em Goiânia/UFG
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        function onLocationFound(e) {
+            var radius = e.accuracy / 2;
+            map.setView(e.latlng, 16);
+            L.marker(e.latlng).addTo(map)
+                .bindPopup("Você está aqui!").openPopup();
+            L.circle(e.latlng, radius, { color: '#4CAF50' }).addTo(map);
+        }
+
+        function onLocationError(e) {
+            console.log("Localização não permitida ou indisponível.");
+        }
+
+        map.on('locationfound', onLocationFound);
+        map.on('locationerror', onLocationError);
+
+        map.locate({setView: true, maxZoom: 16});
+    </script>
+</body>
+</html>
